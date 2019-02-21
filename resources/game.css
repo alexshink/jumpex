@@ -1,0 +1,60 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.page {
+  background: url(img/background-back.png) repeat no-repeat left -150px;
+  animation: backgroundBack 14s linear infinite;
+  overflow-x: hidden;
+}
+
+.page:before,
+.page:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.page:before {
+  top: 0;
+  bottom: 140px;
+  background: url(img/background-middle.png) repeat no-repeat left bottom;
+  filter: contrast(140%);
+  animation: backgroundMiddle 14s linear infinite;
+}
+
+.page:after {
+  height: 140px;
+  background: url(img/bacckground-road.jpg) repeat no-repeat;
+  animation: backgroundRoad 2s linear infinite;
+}
+
+.hero {
+  position: absolute;
+  bottom: 120px;
+  z-index: 1;
+}
+
+@keyframes backgroundBack {
+  100% {
+    background-position-x: -480px;
+  }
+}
+
+@keyframes backgroundMiddle {
+  100% {
+    left: -1024px;
+  }
+}
+
+@keyframes backgroundRoad {
+  100% {
+    left: -388px;
+  }
+}
