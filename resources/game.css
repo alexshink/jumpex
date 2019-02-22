@@ -7,8 +7,6 @@
 }
 
 .page {
-  background: url(img/background-back.png) repeat no-repeat left -150px;
-  animation: backgroundBack 14s linear infinite;
   overflow-x: hidden;
 }
 
@@ -17,44 +15,78 @@
   content: '';
   position: absolute;
   left: 0;
+  top: 0;
   right: 0;
   bottom: 0;
 }
 
 .page:before {
-  top: 0;
+  bottom: 50px;
+  background: #1c3f42 url(img/background-back.png) repeat no-repeat left bottom;
+  animation: backgroundBack 14s linear infinite;
+}
+
+.page:after {
   bottom: 140px;
   background: url(img/background-middle.png) repeat no-repeat left bottom;
   filter: contrast(140%);
   animation: backgroundMiddle 14s linear infinite;
 }
 
-.page:after {
-  height: 140px;
-  background: url(img/bacckground-road.jpg) repeat no-repeat;
-  animation: backgroundRoad 2s linear infinite;
-}
-
-.hero {
+.road {
   position: absolute;
-  bottom: 120px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  background: url(img/bacckground-road.jpg) repeat no-repeat left bottom;
+  animation: backgroundRoad 1.2s linear infinite;
+  overflow: hidden;
   z-index: 1;
 }
 
+.road__item {
+  position: absolute;
+  right: -100px;
+  bottom: 135px;
+}
+
+.road__item_type_bomb {
+  width: 33px;
+  animation: roadBomb 6s linear infinite;
+}
+
+.hero {
+  left: 20px;
+  right: auto;
+  width: 65px;
+  height: 75px;
+  background: url(img/jumpex.gif) no-repeat center -20px/100px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero_jump {
+  animation: heroJump .8s;
+}
+
 @keyframes backgroundBack {
-  100% {
-    background-position-x: -480px;
-  }
+  100% { background-position-x: -480px; }
 }
 
 @keyframes backgroundMiddle {
-  100% {
-    left: -1024px;
-  }
+  100% { left: -1024px; }
 }
 
 @keyframes backgroundRoad {
-  100% {
-    left: -388px;
-  }
+  100% { background-position-x: -388px; }
+}
+
+@keyframes heroJump {
+  50% { bottom: 190px; }
+  100% { bottom: 135px; }
+}
+
+@keyframes roadBomb {
+  100% { right: 100%; }
 }

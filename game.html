@@ -9,7 +9,38 @@
 </head>
 <body class="page">
   
-  <img src="resources/img/jumpex.gif" class="hero">
+  <div id="hero" class="hero road__item"></div>
+  
+  <div class="road">
+    <img src="resources/img/proton-bomb.png" alt="" class="road__item road__item_type_bomb">
+  </div>
+
+  <script>
+    var hero = document.getElementById('hero')
+
+    function addClass(id, addedClass){
+      document.getElementById(id).classList.add(addedClass);
+    };
+
+    function removeClass(id, removeClass){
+      document.getElementById(id).classList.remove(removeClass);
+    };
+
+    function heroJump(){
+      if( !hero.classList.contains('hero_jump') ) {
+        addClass('hero', 'hero_jump');
+        setTimeout(function(){
+          removeClass('hero', 'hero_jump');
+        }, 700);
+      };
+    };
+
+    document.onkeydown = function(e) {
+      if( e.keyCode == 38 ) {
+        heroJump();
+      };
+    };
+  </script>
   
 </body>
 </html>
