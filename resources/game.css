@@ -41,15 +41,25 @@
   animation: backgroundMiddle 8s linear infinite;
 }
 
+.page_game-over:before,
+.page_game-over:after,
+.page_game-over * {
+  animation-play-state: paused !important;
+}
+
 .road {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 200px;
+  height: 155px;
   background: url(img/bacckground-road.jpg) repeat no-repeat left bottom;
   animation: backgroundRoad 1.2s linear infinite;
   z-index: 1;
+}
+
+.page_speed-up .road {
+  animation-duration: .8s;
 }
 
 .obstacles {
@@ -57,7 +67,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 200px;
+  height: 270px;
   overflow: hidden;
   z-index: 2;
 }
@@ -72,37 +82,49 @@
   right: -100px;
   bottom: 135px;
   animation: obstacle linear 4s;
-  /*temp*/
-  border: 1px solid red;
+  pointer-events: none;
 }
 
 .obstacle_bomb img {
-  width: 33px;
+  width: 40px;
 }
 
 .obstacle_fire img {
-  width: 40px;
+  width: 45px;
 }
 
 .obstacle_plasm img {
   width: 70px;
 }
 
+.obstacle_robot {
+  height: 70px;
+}
+
+.obstacle_active img {
+  width: 150px;
+  transition: width .2s;
+}
+
 .hero {
   position: absolute;
   left: 20px;
   bottom: 135px;
-  width: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  width: 45px;
   height: 75px;
-  background: url(img/jumpex.gif) no-repeat center -20px/100px;
   pointer-events: none;
   z-index: 3;
-  /*temp*/
-  border: 1px solid red;
 }
 
 .hero_jump {
-  animation: heroJump .8s;
+  animation: heroJump .9s;
+}
+
+.hero img {
+  margin-bottom: -7px;
 }
 
 @keyframes backgroundBack {

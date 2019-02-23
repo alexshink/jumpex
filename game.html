@@ -9,97 +9,13 @@
 </head>
 <body id="page" class="page">
   
-  <div id="hero" class="hero"></div>
+  <div id="hero" class="hero">
+    <img src="resources/img/jumpex.gif">
+  </div>
   <div id="road" class="road"></div>
   <div id="obstacles" class="obstacles"></div>
 
-  <script>
-    var page = document.getElementById('page'),
-        hero = document.getElementById('hero'),
-        road = document.getElementById('road'),
-        obstacles = document.getElementById('obstacles'),
-
-        // animation speed
-        roadSpeed = parseFloat(getComputedStyle(road).animationDuration),
-        pixelsPerMs = roadSpeed / 388, // road background image = 388
-
-        // obstacles
-        obstaclesItems = {
-          bomb: {
-            img: 'resources/img/proton-bomb.png',
-            cls: 'obstacle_bomb'
-          },
-          fire: {
-            img: 'resources/img/fire.gif',
-            cls: 'obstacle_fire'
-          },
-          plasm: {
-            img: 'resources/img/plasm.gif',
-            cls: 'obstacle_plasm'
-          }
-        };
-
-    function addClass(id, addedClass){
-      document.getElementById(id).classList.add(addedClass);
-    };
-
-    function removeClass(id, removeClass){
-      document.getElementById(id).classList.remove(removeClass);
-    };
-
-    function heroJump(){
-      if( hero.className.indexOf('hero_jump') == -1 ) {
-        addClass('hero', 'hero_jump');
-        setTimeout(function(){
-          removeClass('hero', 'hero_jump');
-        }, 600);
-      };
-    };
-
-    // desktop jump
-    document.onkeydown = function(e){
-      if( e.keyCode == 38 ) {
-        heroJump();
-      };
-    };
-
-    // render obstacles
-    function renderObstacle(){      
-      var renderObstacle = document.createElement('div'),
-          renderObstacleImg = document.createElement('img'),
-          lastObstacle,
-          lastObstacleSpeed,
-          randomObstacle = obstaclesItems[Object.keys(obstaclesItems)[Object.keys(obstaclesItems).length * Math.random() << 0]];
-
-      // create obstacle
-      renderObstacleImg.src = randomObstacle.img;
-      renderObstacle.className = 'obstacle ' + randomObstacle.cls;
-      renderObstacle.appendChild(renderObstacleImg);
-      obstacles.appendChild(renderObstacle);
-
-      // obstacle animation
-      lastObstacle = obstacles.lastChild;
-      lastObstacleSpeed = (lastObstacle.getBoundingClientRect().left + lastObstacle.getBoundingClientRect().width) * pixelsPerMs;
-      lastObstacle.style['animation-duration'] = lastObstacleSpeed + 's';
-    };
-
-    // render obstacles loop
-    (function renderObstacleLoop(){
-      var obstacleRenderDelay = Math.floor(Math.random() * 1500) + 700;
-      setTimeout(function(){
-        renderObstacle();
-        renderObstacleLoop();
-      }, obstacleRenderDelay);
-    }());
-
-    // remove obstacle
-    document.addEventListener('animationend', function(e){
-      if ( e.target.className.indexOf('obstacle') != -1 ) {
-        e.target.remove();
-      };
-    }, false);
-
-  </script>
+  <script src="resources/game.js"></script>
   
 </body>
 </html>
