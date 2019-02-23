@@ -33,6 +33,14 @@
   animation: backgroundMiddle 14s linear infinite;
 }
 
+.page_speed-up:before {
+  animation: backgroundBack 8s linear infinite;
+}
+
+.page_speed-up:after {
+  animation: backgroundMiddle 8s linear infinite;
+}
+
 .road {
   position: absolute;
   left: 0;
@@ -41,29 +49,56 @@
   height: 200px;
   background: url(img/bacckground-road.jpg) repeat no-repeat left bottom;
   animation: backgroundRoad 1.2s linear infinite;
-  overflow: hidden;
   z-index: 1;
 }
 
-.road__item {
+.obstacles {
   position: absolute;
-  right: -100px;
-  bottom: 135px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  overflow: hidden;
+  z-index: 2;
 }
 
-.road__item_type_bomb {
+.obstacle {
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  right: -100px;
+  bottom: 135px;
+  animation: obstacle linear 4s;
+  /*temp*/
+  border: 1px solid red;
+}
+
+.obstacle_bomb img {
   width: 33px;
-  animation: roadBomb 6s linear infinite;
+}
+
+.obstacle_fire img {
+  width: 40px;
+}
+
+.obstacle_plasm img {
+  width: 70px;
 }
 
 .hero {
+  position: absolute;
   left: 20px;
-  right: auto;
+  bottom: 135px;
   width: 65px;
   height: 75px;
   background: url(img/jumpex.gif) no-repeat center -20px/100px;
   pointer-events: none;
-  z-index: 2;
+  z-index: 3;
+  /*temp*/
+  border: 1px solid red;
 }
 
 .hero_jump {
@@ -71,7 +106,7 @@
 }
 
 @keyframes backgroundBack {
-  100% { background-position-x: -480px; }
+  100% { left: -480px; }
 }
 
 @keyframes backgroundMiddle {
@@ -79,14 +114,14 @@
 }
 
 @keyframes backgroundRoad {
-  100% { background-position-x: -388px; }
+  100% { left: -388px; }
 }
 
 @keyframes heroJump {
-  50% { bottom: 190px; }
+  50% { bottom: 200px; }
   100% { bottom: 135px; }
 }
 
-@keyframes roadBomb {
+@keyframes obstacle {
   100% { right: 100%; }
 }
