@@ -82,9 +82,11 @@ function runGame(){
   };
 
   // mobile jump
-  btnJump.onclick = function(){
-    heroJump();
-  };
+  document.addEventListener('touchstart', function(e){
+    if ( e.target.className.indexOf('jump') != -1 ) {
+      heroJump();
+    };
+  }, false);
 
   // render coins
   var renderCoins = document.createElement('div'),
