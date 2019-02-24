@@ -6,46 +6,54 @@ function removeClass(id, removeClass){
   document.getElementById(id).classList.remove(removeClass);
 };
 
+var page = document.getElementById('page'),
+    road = document.getElementById('road'),
+    obstacles = document.getElementById('obstacles'),
+    renderLoopTimeout,
+
+    // animation speed
+    roadSpeed = parseFloat(getComputedStyle(road).animationDuration),
+    pixelsPerMs = roadSpeed / 388, // road background image = 388
+
+    // obstacles
+    obstaclesItems = {
+      bomb: {
+        img: 'resources/img/bomb.png',
+        cls: 'obstacle_bomb'
+      },
+      fire: {
+        img: 'resources/img/fire.gif',
+        cls: 'obstacle_fire'
+      },
+      plasm: {
+        img: 'resources/img/plasm.gif',
+        cls: 'obstacle_plasm'
+      },
+      // robot: {
+      //   img: 'resources/img/robot.gif',
+      //   cls: 'obstacle_robot'
+      // }
+    };
+
 // start game
 document.getElementById('start').onclick = function(){
-  addClass('page', 'page_rungame');
-  runGame();
+  if ( page.className.indexOf('rungame') == -1 ) {
+    runGame();
+  };
 };
 
 function runGame(){
 
+  addClass('page', 'page_rungame');
 
-  var page = document.getElementById('page'),
-      road = document.getElementById('road'),
-      obstacles = document.getElementById('obstacles'),
-      heroRender = document.createElement('div'),
-      hero,
-
-      // animation speed
-      roadSpeed = parseFloat(getComputedStyle(road).animationDuration),
-      pixelsPerMs = roadSpeed / 388, // road background image = 388
-
-      // obstacles
-      obstaclesItems = {
-        bomb: {
-          img: 'resources/img/proton-bomb.png',
-          cls: 'obstacle_bomb'
-        },
-        fire: {
-          img: 'resources/img/fire.gif',
-          cls: 'obstacle_fire'
-        },
-        plasm: {
-          img: 'resources/img/plasm.gif',
-          cls: 'obstacle_plasm'
-        },
-        // robot: {
-        //   img: 'resources/img/robot.gif',
-        //   cls: 'obstacle_robot'
-        // }
-      };
+  // remove all obstacles
+  obstacles.innerHTML = '';
+    clearTimeout(renderLoopTimeout);
 
   // render hero
+  var heroRender = document.createElement('div'),
+      hero;
+
   heroRender.innerHTML = '<div id="hero" class="hero">' +
                       '<img src="resources/img/jumpex.gif">' +
                     '</div>';
@@ -110,7 +118,7 @@ function runGame(){
     getCoins = setInterval(function(){
       increaseCoins();
     }, 100);
-  }, 1400)
+  }, 1400);
 
   // render obstacles
   function renderObstacle(){      
@@ -136,14 +144,12 @@ function runGame(){
   // render obstacles loop
   (function renderObstacleLoop(){
     var obstacleRenderDelay = Math.floor(Math.random() * 1500) + 700;
-    setTimeout(function(){
-      renderObstacle();
-      if ( page.className.indexOf('page_rungame') != -1 ) {
-        renderObstacleLoop();
-      } else {
-
-      }
-    }, obstacleRenderDelay);
+    if ( page.className.indexOf('page_rungame') != -1 ) {
+      renderLoopTimeout = setTimeout(function(){
+          renderObstacle();
+          renderObstacleLoop();
+      }, obstacleRenderDelay);
+    };
   }());
 
   // remove obstacle
@@ -154,17 +160,17 @@ function runGame(){
   }, false);
 
   // obstacle detection
-  setInterval(function(){
+  var obstacleDetection = setInterval(function(){
     try {
       var heroPosX = hero.getBoundingClientRect().left + hero.getBoundingClientRect().width,
           heroPosY = parseFloat(getComputedStyle(hero).bottom),
 
-          allObstacles = document.getElementsByClassName('obstacle'),
-          firstObstacle = allObstacles[0],
+          firstObstacle = document.getElementsByClassName('obstacle')[0],
           obstaclePosX = firstObstacle.getBoundingClientRect().left,
           obstaclePosY = parseFloat(getComputedStyle(firstObstacle).bottom) + firstObstacle.getBoundingClientRect().height;
 
       if ( obstaclePosX <= heroPosX && obstaclePosY > heroPosY ) {
+        stopGame();
         // bomb explosion
         if ( firstObstacle.className.indexOf('obstacle_bomb') != -1 ) {
           firstObstacle.firstElementChild.remove();
@@ -175,16 +181,17 @@ function runGame(){
           }, 2500);
         };
         firstObstacle.classList.add('obstacle_active');
-        stopGame();
       };
     } catch {};
   }, 10);
 
   // stop game
   function stopGame(){
-    hero.remove();
-    removeClass('page', 'page_rungame');
     clearInterval(getCoins);
     renderCoins.remove();
+    clearInterval(obstacleDetection);
+    removeClass('page', 'page_rungame');
+    hero.remove();
   };
+
 };
