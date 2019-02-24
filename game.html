@@ -10,28 +10,39 @@
 </head>
 <body id="page" class="page">
   
-  <div id="road" class="road"></div>
-  <div id="obstacles" class="obstacles"></div>
+  <div class="gameboard">
+    <div id="road" class="road"></div>
+    <div id="obstacles" class="obstacles"></div>
+  </div>
+
+  <div class="controls">
+    <div class="controls__inner">
+      <button type="button" id="btnJump" class="controls__button controls__button_type_jump">Jump!</button>
+      <button type="button" class="controls__button">Jump!</button>
+    </div>
+  </div>
 
   <div class="menu">
-    <h1 class=menu__title>Jumpex</h1>
-    <ul class="menu__inner">
-      <li class="menu__item">
-        <button type="button" id="start" class="menu__button">Start</button>
-      </li>
-      <li class="menu__item">
-        <button type="button" class="menu__button">Upgrade</button>
-      </li>
-      <li class="menu__item">
-        <button type="button" class="menu__button">Records</button>
-      </li>
-      <li class="menu__item">
-        <a href="" class="menu__button">Credits</a>
-      </li>
-      <li class="menu__item">
-        <a href="" class="menu__button">Exit</a>
-      </li>
-    </ul>
+    <div class="menu__inner">
+      <h1 class=menu__title>Jumpex</h1>
+      <ul class="menu__list">
+        <li class="menu__item">
+          <button type="button" id="start" class="menu__button">Start</button>
+        </li>
+        <li class="menu__item">
+          <button type="button" class="menu__button">Upgrade</button>
+        </li>
+        <li class="menu__item">
+          <button type="button" class="menu__button">Records</button>
+        </li>
+        <li class="menu__item">
+          <a href="" class="menu__button">Credits</a>
+        </li>
+        <li class="menu__item">
+          <a href="" class="menu__button">Exit</a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <script src="resources/game.js"></script>

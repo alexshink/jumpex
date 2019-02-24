@@ -33,7 +33,10 @@ var page = document.getElementById('page'),
       //   img: 'resources/img/robot.gif',
       //   cls: 'obstacle_robot'
       // }
-    };
+    },
+
+    // mobile controls
+    btnJump = document.getElementById('btnJump');
 
 // start game
 document.getElementById('start').onclick = function(){
@@ -48,15 +51,15 @@ function runGame(){
 
   // remove all obstacles
   obstacles.innerHTML = '';
-    clearTimeout(renderLoopTimeout);
+  clearTimeout(renderLoopTimeout);
 
   // render hero
   var heroRender = document.createElement('div'),
       hero;
 
-  heroRender.innerHTML = '<div id="hero" class="hero">' +
-                      '<img src="resources/img/jumpex.gif">' +
-                    '</div>';
+  heroRender.id = 'hero';
+  heroRender.className = 'hero';
+  heroRender.innerHTML = '<img src="resources/img/jumpex.gif">';
   page.appendChild(heroRender);
   hero = document.getElementById('hero');
 
@@ -76,6 +79,11 @@ function runGame(){
     if( e.keyCode == 38 ) {
       heroJump();
     };
+  };
+
+  // mobile jump
+  btnJump.onclick = function(){
+    heroJump();
   };
 
   // render coins
