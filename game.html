@@ -5,17 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jumpex</title>
   
+  <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
   <link rel="stylesheet" href="resources/game.css">
 </head>
 <body id="page" class="page">
   
-  <div id="hero" class="hero">
-    <img src="resources/img/jumpex.gif">
-  </div>
   <div id="road" class="road"></div>
   <div id="obstacles" class="obstacles"></div>
 
+  <div class="menu">
+    <h1 class=menu__title>Jumpex</h1>
+    <ul class="menu__inner">
+      <li class="menu__item">
+        <button type="button" id="start" class="menu__button">Start</button>
+      </li>
+      <li class="menu__item">
+        <button type="button" class="menu__button">Upgrade</button>
+      </li>
+      <li class="menu__item">
+        <button type="button" class="menu__button">Records</button>
+      </li>
+      <li class="menu__item">
+        <a href="" class="menu__button">Credits</a>
+      </li>
+      <li class="menu__item">
+        <a href="" class="menu__button">Exit</a>
+      </li>
+    </ul>
+  </div>
+
   <script src="resources/game.js"></script>
-  
 </body>
 </html>
