@@ -23,7 +23,7 @@ var html = document.documentElement,
     // obstacles
     obstaclesItems = {
       bomb: {
-        img: 'resources/img/bomb.png',
+        img: 'resources/img/bomb.webp',
         cls: 'obstacle_bomb'
       },
       fire: {

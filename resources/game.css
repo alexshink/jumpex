@@ -30,13 +30,13 @@ a {
 
 .page:before {
   bottom: 50px;
-  background: #1c3f42 url(img/background-back.png) repeat no-repeat left bottom;
+  background: #1c3f42 url(img/background-back.webp) repeat no-repeat left bottom;
   animation: backgroundBack 14s linear infinite;
 }
 
 .page:after {
   bottom: 140px;
-  background: url(img/background-middle.png) repeat no-repeat left bottom;
+  background: url(img/background-middle.webp) repeat no-repeat left bottom;
   filter: contrast(140%);
   animation: backgroundMiddle 14s linear infinite;
 }
@@ -69,7 +69,7 @@ a {
   right: 0;
   bottom: 0;
   height: 155px;
-  background: url(img/background-road.jpg) repeat no-repeat left bottom;
+  background: url(img/background-road.webp) repeat no-repeat left bottom;
   animation: backgroundRoad 1.2s linear infinite;
   z-index: 1;
 }
