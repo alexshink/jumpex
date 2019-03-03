@@ -8,13 +8,6 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-html {
-  position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
-}
-
 button {
   background: none;
   cursor: pointer;
@@ -53,6 +46,7 @@ a {
 .page_rungame .menu {
   opacity: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .page_rungame .menu__inner {
@@ -163,7 +157,7 @@ a {
   padding-bottom: 40px;
   background: rgba(0, 0, 0, 0.60);
   transition: all 1s;
-  overflow: auto;
+  overflow: hidden;
   z-index: 5;
 }
 
@@ -356,6 +350,18 @@ a {
   }
   .controls__button_type_jump:active {
     background-color: #000;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .menu {
+    overflow: auto;
   }
 }
 

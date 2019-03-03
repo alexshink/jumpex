@@ -2,9 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Jumpex</title>
+
+  <meta name="title" content="Jumpex">
+  <meta name="description" content="PWA Game test. HTML, CSS, pure JavaScript.">
+  <meta name="keywords" content="html5, html, css, css3, pwa, pwa game, progressive web app, javascript game, html game, css game">
+  <meta name="robots" content="index, follow">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="language" content="English">
+  <meta name="author" content="Alex Shink">
   
+  <link rel="manifest" href="manifest.json">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Jumpex">
+  <meta name="apple-mobile-web-app-title" content="Jumpex">
+  <meta name="theme-color" content="#000">
+  <meta name="msapplication-navbutton-color" content="#000">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="msapplication-starturl" content="/game.html">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="resources/logo/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="resources/logo/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="resources/logo/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="resources/logo/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="resources/logo/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="resources/logo/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="resources/logo/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="resources/logo/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="resources/logo/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="resources/logo/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="resources/logo/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="resources/logo/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="resources/logo/favicon-16x16.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="resources/logo/ms-icon-144x144.png">
+
   <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
   <link rel="stylesheet" href="resources/game.min.css">
 </head>
@@ -48,6 +83,20 @@
     </div>
   </div>
 
+  <script>
+    if ('serviceWorker' in navigator) {
+     window.addEventListener('load', function() {  
+       navigator.serviceWorker.register('/jumpex/resources/sw.js').then(
+         function(registration) {
+           // Registration was successful
+           console.log('ServiceWorker registration successful with scope: ', registration.scope); },
+         function(err) {
+           // registration failed :(
+           console.log('ServiceWorker registration failed: ', err);
+         });
+     });
+    }
+  </script>
   <script src="resources/game.min.js"></script>
 </body>
 </html>
