@@ -8,6 +8,13 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 button {
   background: none;
   cursor: pointer;
@@ -153,9 +160,10 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 40px;
   background: rgba(0, 0, 0, 0.60);
   transition: all 1s;
-  overflow: hidden;
+  overflow: auto;
   z-index: 5;
 }
 
@@ -196,6 +204,14 @@ a {
   margin-bottom: 10px;
 }
 
+.menu__item_type_fullscreen {
+  margin-top: 20px;
+}
+
+.menu__item_type_fullscreen .menu__button {
+  font-size: 20px;
+}
+
 .menu__button {
   font-family: monospace;
   font-size: 36px;
@@ -208,6 +224,14 @@ a {
 .menu__button:focus,
 .menu__button:hover {
   text-shadow: 0 0 17px #39adff;
+}
+
+.menu__button:after {
+  content: attr(data-text-off);
+}
+
+.menu__button_fullscreen:after {
+  content: attr(data-text-on);
 }
 
 /* COINS */

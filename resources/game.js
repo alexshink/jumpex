@@ -1,14 +1,19 @@
+function getId(id){
+  return document.getElementById(id);
+};
+
 function addClass(id, addedClass){
-  document.getElementById(id).classList.add(addedClass);
+  getId(id).classList.add(addedClass);
 };
 
 function removeClass(id, removeClass){
-  document.getElementById(id).classList.remove(removeClass);
+  getId(id).classList.remove(removeClass);
 };
 
-var page = document.getElementById('page'),
-    road = document.getElementById('road'),
-    obstacles = document.getElementById('obstacles'),
+var html = document.documentElement,
+    page = getId('page'),
+    road = getId('road'),
+    obstacles = getId('obstacles'),
     renderLoopTimeout,
 
     // animation speed
@@ -36,14 +41,27 @@ var page = document.getElementById('page'),
     },
 
     // mobile controls
-    btnJump = document.getElementById('btnJump');
+    btnJump = getId('btnJump'),
+    menuButtons = document.getElementsByClassName('menu__button');
 
-// start game
-document.getElementById('start').onclick = function(){
-  if ( page.className.indexOf('rungame') == -1 ) {
-    runGame();
-  };
-};
+// menu
+for (var i = 0; i < menuButtons.length; i++) {
+  menuButtons[i].addEventListener('click', function(){
+    switch (this.id) {
+      case 'menu-start':
+        runGame();
+        break;
+      case 'menu-fullscreen':
+        this.classList.toggle('menu__button_fullscreen');
+        if ( this.className.indexOf('fullscreen') != -1 ) {
+          openFullscreen();
+        } else {
+          closeFullscreen();
+        }
+        break;
+    }
+  }, false);
+}
 
 function runGame(){
 
@@ -61,7 +79,7 @@ function runGame(){
   heroRender.className = 'hero';
   heroRender.innerHTML = '<img src="resources/img/jumpex.gif">';
   page.appendChild(heroRender);
-  hero = document.getElementById('hero');
+  hero = getId('hero');
 
   function heroJump(){
     if( hero.className.indexOf('hero_jump') == -1 ) {
@@ -104,8 +122,8 @@ function runGame(){
                             '</p>' +
                           '</div>';
   page.appendChild(renderCoins);
-  coinsCurrent = document.getElementById('coins__current');
-  coinsAll = document.getElementById('coins__all');
+  coinsCurrent = getId('coins__current');
+  coinsAll = getId('coins__all');
   
   // increase coins
   function increaseCoins(count){
@@ -204,4 +222,30 @@ function runGame(){
     hero.remove();
   };
 
+};
+
+/* fullscreen on */
+function openFullscreen(){
+  if (html.requestFullscreen) {
+    html.requestFullscreen();
+  } else if (html.mozRequestFullScreen) {
+    html.mozRequestFullScreen();
+  } else if (html.webkitRequestFullscreen) { 
+    html.webkitRequestFullscreen();
+  } else if (html.msRequestFullscreen) {
+    html.msRequestFullscreen();
+  };
+};
+
+/* fullscreen off */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  };
 };
