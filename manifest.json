@@ -3,7 +3,7 @@
   "short_name": "Jumpex",
   "description": "PWA Game. Run or die.",
   "lang": "ru-RU",
-  "start_url": "/jumpex/game.html",
+  "start_url": "game.html",
   "display": "fullscreen",
   "theme_color": "#000",
   "background_color": "#000",
