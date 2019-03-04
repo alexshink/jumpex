@@ -356,18 +356,6 @@ a {
   }
 }
 
-@media screen and (max-width: 768px) {
-  html {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-  }
-  .menu {
-    overflow: auto;
-  }
-}
-
 @media screen and (orientation: landscape) and (max-width: 768px) {
   .menu__title {
     margin: 20px 0 30px;
