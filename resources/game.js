@@ -66,6 +66,7 @@ for (var i = 0; i < menuButtons.length; i++) {
 function runGame(){
 
   addClass('page', 'page_rungame');
+  addClass('menu', 'menu_disable');
 
   // remove all obstacles
   obstacles.innerHTML = '';
@@ -215,6 +216,10 @@ function runGame(){
 
   // stop game
   function stopGame(){
+    getId('menu').scrollTop = 0;
+    setTimeout(function(){
+      removeClass('menu', 'menu_disable');
+    }, 700);
     clearInterval(getCoins);
     renderCoins.remove();
     clearInterval(obstacleDetection);

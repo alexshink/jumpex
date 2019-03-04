@@ -46,7 +46,6 @@ a {
 .page_rungame .menu {
   opacity: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .page_rungame .menu__inner {
@@ -157,8 +156,12 @@ a {
   padding-bottom: 40px;
   background: rgba(0, 0, 0, 0.60);
   transition: all 1s;
-  overflow: hidden;
+  overflow: auto;
   z-index: 5;
+}
+
+.menu_disable {
+  overflow: hidden;
 }
 
 .menu__title {
