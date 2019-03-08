@@ -8,6 +8,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  overflow: hidden;
+}
+
 button {
   background: none;
   cursor: pointer;
@@ -18,26 +22,34 @@ a {
   text-decoration: none;
 }
 
+.page {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
 .page:before,
 .page:after {
   content: '';
   position: absolute;
   left: 0;
   top: 0;
-  right: 0;
   bottom: 0;
 }
 
 .page:before {
-  bottom: 50px;
-  background: #1c3f42 url(img/background-back.webp) repeat no-repeat left bottom;
+  width: calc(100% + 480px);
+  bottom: 310px;
+  background: #1c3f42 url(img/background-back.png) repeat no-repeat left bottom;
   animation: backgroundBack 14s linear infinite;
 }
 
 .page:after {
+  width: calc(100% + 1024px);
   bottom: 140px;
-  background: url(img/background-middle.webp) repeat no-repeat left bottom;
-  filter: contrast(140%);
+  background: url(img/background-middle.png) repeat no-repeat left bottom;
+  /*filter: contrast(140%);*/
   animation: backgroundMiddle 14s linear infinite;
 }
 
@@ -65,10 +77,10 @@ a {
 .road {
   position: absolute;
   left: 0;
-  right: 0;
   bottom: 0;
+  width: calc(100% + 388px);
   height: 155px;
-  background: url(img/background-road.webp) repeat no-repeat left bottom;
+  background: url(img/background-road.jpg) repeat no-repeat left bottom;
   animation: backgroundRoad 1.2s linear infinite;
   z-index: 1;
 }
@@ -94,7 +106,7 @@ a {
   align-items: flex-end;
   right: -100px;
   bottom: 135px;
-  animation: obstacle linear 4s;
+  transition: transform linear 4s;
   pointer-events: none;
 }
 
@@ -117,6 +129,10 @@ a {
 .obstacle_active img {
   width: 150px;
   transition: width .2s;
+}
+
+.page:not(.page_rungame) .obstacle:not(.obstacle_active) {
+  display: none;
 }
 
 /* HERO */
@@ -292,15 +308,15 @@ a {
 }
 
 @keyframes backgroundBack {
-  100% { left: -480px; }
+  100% { transform: translateX(-480px); }
 }
 
 @keyframes backgroundMiddle {
-  100% { left: -1024px; }
+  100% { transform: translateX(-1024px); }
 }
 
 @keyframes backgroundRoad {
-  100% { left: -388px; }
+  100% { transform: translateX(-388px); }
 }
 
 @keyframes heroJump {
@@ -308,8 +324,9 @@ a {
   100% { bottom: 135px; }
 }
 
-@keyframes obstacle {
-  100% { right: 100%; }
+@keyframes heroJumpMobile {
+  50% { bottom: 180px; }
+  100% { bottom: 115px; }
 }
 
 @keyframes coinsFlipOne {
@@ -327,19 +344,37 @@ a {
 }
 
 @media screen and (max-width: 1024px) {
+  .page:after {
+    bottom: 50px;
+  }
+  .page:before {
+    bottom: 180px;
+  }
+  .road {
+    background-position-y: 28px;
+  }
+  .obstacle {
+    bottom: 115px;
+  }
+  .hero {
+    bottom: 115px;
+  }
+  .hero_jump {
+    animation: heroJumpMobile .9s;
+  }
   .controls {
     position: absolute;
     left: 15px;
     right: 15px;
     bottom: 0;
     display: flex;
-    height: 100px;
+    height: 75px;
     z-index: 3;
   }
   .controls__button {
     display: block;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 60px;
     font-size: 0;
     border-radius: 5px;
     background-color: #1f1f1f;

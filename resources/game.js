@@ -23,7 +23,7 @@ var html = document.documentElement,
     // obstacles
     obstaclesItems = {
       bomb: {
-        img: 'resources/img/bomb.webp',
+        img: 'resources/img/bomb.png',
         cls: 'obstacle_bomb'
       },
       fire: {
@@ -42,23 +42,26 @@ var html = document.documentElement,
 
     // mobile controls
     btnJump = getId('btnJump'),
+    menu = getId('menu'),
     menuButtons = document.getElementsByClassName('menu__button');
 
 // menu
 for (var i = 0; i < menuButtons.length; i++) {
   menuButtons[i].addEventListener('click', function(){
-    switch (this.id) {
-      case 'menu-start':
-        runGame();
-        break;
-      case 'menu-fullscreen':
-        this.classList.toggle('menu__button_fullscreen');
-        if ( this.className.indexOf('fullscreen') != -1 ) {
-          openFullscreen();
-        } else {
-          closeFullscreen();
-        }
-        break;
+    if ( page.className.indexOf('page_rungame') == -1 && menu.className.indexOf('menu_disable') == -1 ) {
+      switch (this.id) {
+        case 'menu-start':
+          runGame();
+          break;
+        case 'menu-fullscreen':
+          this.classList.toggle('menu__button_fullscreen');
+          if ( this.className.indexOf('fullscreen') != -1 ) {
+            openFullscreen();
+          } else {
+            closeFullscreen();
+          }
+          break;
+      }
     }
   }, false);
 }
@@ -70,7 +73,6 @@ function runGame(){
 
   // remove all obstacles
   obstacles.innerHTML = '';
-  clearTimeout(renderLoopTimeout);
 
   // render hero
   var heroRender = document.createElement('div'),
@@ -151,23 +153,27 @@ function runGame(){
 
   // render obstacles
   function renderObstacle(){      
-    var renderObstacle = document.createElement('div'),
-        renderObstacleImg = document.createElement('img'),
-        lastObstacle,
-        lastObstacleSpeed,
-        // random key from obstacles
-        randomObstacle = obstaclesItems[Object.keys(obstaclesItems)[Object.keys(obstaclesItems).length * Math.random() << 0]];
+    if ( page.className.indexOf('page_rungame') != -1 ) {
+      var renderObstacle = document.createElement('div'),
+          renderObstacleImg = document.createElement('img'),
+          lastObstacle,
+          lastObstacleSpeed,
+          // random key from obstacles
+          randomObstacle = obstaclesItems[Object.keys(obstaclesItems)[Object.keys(obstaclesItems).length * Math.random() << 0]];
 
-    // create obstacle
-    renderObstacleImg.src = randomObstacle.img;
-    renderObstacle.className = 'obstacle ' + randomObstacle.cls;
-    renderObstacle.appendChild(renderObstacleImg);
-    obstacles.appendChild(renderObstacle);
+      // create obstacle
+      renderObstacleImg.src = randomObstacle.img;
+      renderObstacle.className = 'obstacle ' + randomObstacle.cls;
+      renderObstacle.appendChild(renderObstacleImg);
+      obstacles.appendChild(renderObstacle);
 
-    // obstacle animation
-    lastObstacle = obstacles.lastChild;
-    lastObstacleSpeed = (lastObstacle.getBoundingClientRect().left + lastObstacle.getBoundingClientRect().width) * pixelsPerMs;
-    lastObstacle.style['animation-duration'] = lastObstacleSpeed + 's';
+      // obstacle animation
+      lastObstacle = obstacles.lastChild;
+      lastObstacleSpeed = (lastObstacle.getBoundingClientRect().left+100) * pixelsPerMs;
+      // lastObstacle.style['animation-duration'] = lastObstacleSpeed + 's';
+      lastObstacle.style['transition'] = 'transform linear ' + lastObstacleSpeed + 's';
+      lastObstacle.style['transform'] = 'translateX(-' + (lastObstacle.getBoundingClientRect().left+100) + 'px)';
+    };
   };
 
   // render obstacles loop
@@ -175,31 +181,28 @@ function runGame(){
     var obstacleRenderDelay = Math.floor(Math.random() * 1500) + 700;
     if ( page.className.indexOf('page_rungame') != -1 ) {
       renderLoopTimeout = setTimeout(function(){
-          renderObstacle();
-          renderObstacleLoop();
+        renderObstacle();
+        renderObstacleLoop();
       }, obstacleRenderDelay);
-    };
+    }
   }());
-
-  // remove obstacle
-  document.addEventListener('animationend', function(e){
-    if ( e.target.className.indexOf('obstacle') != -1 ) {
-      e.target.remove();
-    };
-  }, false);
 
   // obstacle detection
   var obstacleDetection = setInterval(function(){
     try {
-      var heroPosX = hero.getBoundingClientRect().left + hero.getBoundingClientRect().width,
+      var heroOffsetLeft = hero.getBoundingClientRect().left,
+          heroPosX = heroOffsetLeft + hero.getBoundingClientRect().width,
           heroPosY = parseFloat(getComputedStyle(hero).bottom),
 
           firstObstacle = document.getElementsByClassName('obstacle')[0],
           obstaclePosX = firstObstacle.getBoundingClientRect().left,
+          obstacleLeftWidth = obstaclePosX + firstObstacle.getBoundingClientRect().width,
           obstaclePosY = parseFloat(getComputedStyle(firstObstacle).bottom) + firstObstacle.getBoundingClientRect().height;
 
-      if ( obstaclePosX <= heroPosX && obstaclePosY > heroPosY ) {
+      if ( (obstaclePosX <= heroPosX && obstacleLeftWidth > heroOffsetLeft) && obstaclePosY > heroPosY ) {
+        firstObstacle.classList.add('obstacle_active');
         stopGame();
+
         // bomb explosion
         if ( firstObstacle.className.indexOf('obstacle_bomb') != -1 ) {
           firstObstacle.firstElementChild.remove();
@@ -209,22 +212,31 @@ function runGame(){
             firstObstacle.remove();
           }, 2500);
         };
-        firstObstacle.classList.add('obstacle_active');
+        
+      };
+
+      if ( firstObstacle.getBoundingClientRect().left <= -100 ) {
+        firstObstacle.remove();
       };
     } catch {};
   }, 10);
 
   // stop game
   function stopGame(){
-    getId('menu').scrollTop = 0;
+    clearInterval(getCoins);
+    clearInterval(obstacleDetection);
+    menu.scrollTop = 0;
+    removeClass('page', 'page_rungame');
     setTimeout(function(){
       removeClass('menu', 'menu_disable');
     }, 700);
-    clearInterval(getCoins);
     renderCoins.remove();
-    clearInterval(obstacleDetection);
-    removeClass('page', 'page_rungame');
     hero.remove();
+    // stop active obstacle
+    var activeObstacle = document.getElementsByClassName('obstacle')[0];
+    activeObstacle.style['left'] = activeObstacle.getBoundingClientRect().left + 'px';
+    activeObstacle.style['transition'] = 'none';
+    activeObstacle.style['transform'] = 'none';
   };
 
 };
