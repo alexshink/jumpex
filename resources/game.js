@@ -201,7 +201,7 @@ function runGame(){
 
       if ( (obstaclePosX <= heroPosX && obstacleLeftWidth > heroOffsetLeft) && obstaclePosY > heroPosY ) {
         firstObstacle.classList.add('obstacle_active');
-        stopGame();
+        window.stopGame();
 
         // bomb explosion
         if ( firstObstacle.className.indexOf('obstacle_bomb') != -1 ) {
@@ -222,7 +222,7 @@ function runGame(){
   }, 10);
 
   // stop game
-  function stopGame(){
+  window.stopGame = function(){
     clearInterval(getCoins);
     clearInterval(obstacleDetection);
     menu.scrollTop = 0;
@@ -241,28 +241,39 @@ function runGame(){
 
 };
 
-/* fullscreen on */
-function openFullscreen(){
-  if (html.requestFullscreen) {
-    html.requestFullscreen();
-  } else if (html.mozRequestFullScreen) {
-    html.mozRequestFullScreen();
-  } else if (html.webkitRequestFullscreen) { 
-    html.webkitRequestFullscreen();
-  } else if (html.msRequestFullscreen) {
-    html.msRequestFullscreen();
-  };
-};
+// resize
+window.addEventListener('resize', function(){
+  if ( page.className.indexOf('page_rungame') != -1 ) {
+    window.stopGame();
+  }; 
+}, false);
 
-/* fullscreen off */
-function closeFullscreen() {
-  if (document.exitFullscreen) {
-    document.exitFullscreen();
-  } else if (document.mozCancelFullScreen) {
-    document.mozCancelFullScreen();
-  } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  } else if (document.msExitFullscreen) {
-    document.msExitFullscreen();
+// remove fullscreen function, if run in PWA
+if ( window.matchMedia('(display-mode: standalone)').matches ) {
+  getId('menu-fullscreen').remove();
+} else {
+  /* fullscreen on */
+  function openFullscreen(){
+    if (html.requestFullscreen) {
+      html.requestFullscreen();
+    } else if (html.mozRequestFullScreen) {
+      html.mozRequestFullScreen();
+    } else if (html.webkitRequestFullscreen) { 
+      html.webkitRequestFullscreen();
+    } else if (html.msRequestFullscreen) {
+      html.msRequestFullscreen();
+    };
+  };
+  /* fullscreen off */
+  function closeFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    };
   };
 };
