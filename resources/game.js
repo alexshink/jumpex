@@ -23,27 +23,50 @@ var html = document.documentElement,
     // obstacles
     obstaclesItems = {
       bomb: {
-        img: 'resources/img/bomb.png',
+        img: 'resources/img/obstacles/bomb.png',
         cls: 'obstacle_bomb'
       },
       fire: {
-        img: 'resources/img/fire.gif',
+        img: 'resources/img/obstacles/fire.gif',
         cls: 'obstacle_fire'
       },
       plasm: {
-        img: 'resources/img/plasm.gif',
+        img: 'resources/img/obstacles/plasm.gif',
         cls: 'obstacle_plasm'
       },
-      // robot: {
-      //   img: 'resources/img/robot.gif',
-      //   cls: 'obstacle_robot'
-      // }
+      robot: {
+        img: 'resources/img/obstacles/robot.gif',
+        cls: 'obstacle_robot'
+      }
     },
 
     // mobile controls
     btnJump = getId('btnJump'),
     menu = getId('menu'),
     menuButtons = document.getElementsByClassName('menu__button');
+
+// preload obstacles images
+function preloadObstacles(obstaclesItems, finish){
+  var counter = 0,
+      imgCount = Object.keys(obstaclesItems).length;
+  Object.keys(obstaclesItems).map(function(objectKey) {
+    preloadImage(obstaclesItems[objectKey].img, function(){
+      counter++;
+      if ( counter == imgCount ) {
+        finish();
+      };
+    });
+  });
+  function preloadImage(url, imageLoaded){
+    var img = new Image();
+    img.onload = imageLoaded;
+    img.src = url;
+  }
+};
+
+// preloadObstacles(obstaclesItems, function(){
+//   removeClass('page', 'page_preload');
+// });
 
 // menu
 for (var i = 0; i < menuButtons.length; i++) {
@@ -61,10 +84,10 @@ for (var i = 0; i < menuButtons.length; i++) {
             closeFullscreen();
           }
           break;
-      }
-    }
+      };
+    };
   }, false);
-}
+};
 
 function runGame(){
 
@@ -84,6 +107,7 @@ function runGame(){
   page.appendChild(heroRender);
   hero = getId('hero');
 
+  // hero jump
   function heroJump(){
     if( hero.className.indexOf('hero_jump') == -1 ) {
       addClass('hero', 'hero_jump');
@@ -95,10 +119,30 @@ function runGame(){
     };
   };
 
-  // desktop jump
+  // hero fire
+  function heroFire(){
+    if( hero.className.indexOf('hero_fire') == -1 ) {
+      // render shot
+      var fireShot = document.createElement('span');
+      fireShot.className = 'fire-shot';
+      hero.appendChild(fireShot);
+      // hero class
+      addClass('hero', 'hero_fire');
+      setTimeout(function(){
+        removeClass('hero', 'hero_fire');
+      }, 700);
+    };
+  };
+
+  // desktop hero controls
   document.onkeydown = function(e){
-    if( e.keyCode == 38 ) {
-      heroJump();
+    switch (e.keyCode) {
+      case 38: // 'arrow up' jump
+        heroJump();
+        break;
+      case 32: // 'space' fire
+        heroFire();
+        break;
     };
   };
 
@@ -108,6 +152,11 @@ function runGame(){
       heroJump();
     };
   }, false);
+
+  // coins storage
+  if ( !localStorage.coins ) {
+    localStorage.coins = 0;
+  };
 
   // render coins
   var renderCoins = document.createElement('div'),
@@ -138,11 +187,6 @@ function runGame(){
     coinsAll.innerHTML = localStorage.coins;
   };
 
-  // coins storage
-  if ( !localStorage.coins ) {
-    localStorage.coins = 0;
-  };
-
   // get coins
   var getCoins;
   setTimeout(function(){
@@ -170,7 +214,6 @@ function runGame(){
       // obstacle animation
       lastObstacle = obstacles.lastChild;
       lastObstacleSpeed = (lastObstacle.getBoundingClientRect().left+100) * pixelsPerMs;
-      // lastObstacle.style['animation-duration'] = lastObstacleSpeed + 's';
       lastObstacle.style['transition'] = 'transform linear ' + lastObstacleSpeed + 's';
       lastObstacle.style['transform'] = 'translateX(-' + (lastObstacle.getBoundingClientRect().left+100) + 'px)';
     };
@@ -207,7 +250,7 @@ function runGame(){
         if ( firstObstacle.className.indexOf('obstacle_bomb') != -1 ) {
           firstObstacle.firstElementChild.remove();
           firstObstacle.appendChild(document.createElement('img'));
-          firstObstacle.firstElementChild.src = 'resources/img/explosive.gif';
+          firstObstacle.firstElementChild.src = 'resources/img/obstacles/explosive.gif';
           setTimeout(function(){
             firstObstacle.remove();
           }, 2500);
@@ -215,6 +258,7 @@ function runGame(){
         
       };
 
+      // remove useless obstacle
       if ( firstObstacle.getBoundingClientRect().left <= -100 ) {
         firstObstacle.remove();
       };
@@ -247,14 +291,6 @@ window.addEventListener('resize', function(){
     window.stopGame();
   }; 
 }, false);
-
-// remove fullscreen button, if run in PWA
-const isInStandaloneMode = () =>
-  ( window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone );
-
-if ( isInStandaloneMode() ) {
-  getId('menu-fullscreen').remove();
-};
 
 /* fullscreen on */
 function openFullscreen(){

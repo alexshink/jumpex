@@ -307,6 +307,42 @@ a {
   display: none;
 }
 
+/*.page_preload .gameboard:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 10;
+}
+
+.page_preload .gameboard.gameboard:after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 20px);
+  top: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  border: 2px solid #65acde;
+  box-shadow: 0 0 80px 0, inset 0 0 30px 0;
+  color: #00bbff;
+  animation: preloader 1s linear infinite;
+  z-index: 11;
+}*/
+
+.fire-shot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: 40%;
+  right: 0;
+  background: red;
+  border-radius: 50%;
+  animation: fireShot 1s linear;
+}
+
 @keyframes backgroundBack {
   100% { transform: translateX(-480px); }
 }
@@ -342,6 +378,21 @@ a {
 @keyframes title {
   to { right: 0; }
 }
+
+/*@keyframes preloader {
+  20% {
+    color: #b600ff;
+  }
+  50% {
+    color: #ff0000;
+  }
+  80% {
+    color: #00ff39;
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}*/
 
 @media screen and (max-width: 1024px) {
   .page:after {

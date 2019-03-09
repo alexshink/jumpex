@@ -41,7 +41,7 @@
   <meta name="msapplication-TileImage" content="resources/logo/ms-icon-144x144.png">
 
   <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
-  <link rel="stylesheet" href="resources/game.min.css?v=3">
+  <link rel="stylesheet" href="resources/game.css?v=3">
 </head>
 <body id="page" class="page">
   
@@ -84,18 +84,16 @@
 
   <script>
     if ('serviceWorker' in navigator) {
-     window.addEventListener('load', function() {  
-       navigator.serviceWorker.register('sw.js').then(
-         function(registration) {
-           // Registration was successful
-           console.log('ServiceWorker registration successful with scope: ', registration.scope); },
-         function(err) {
-           // registration failed :(
-           console.log('ServiceWorker registration failed: ', err);
-         });
-     });
-    }
+      window.addEventListener('load', function() {  
+        navigator.serviceWorker.register('sw.js').then(
+          function(registration) {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope); },
+          function(err) {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    };
   </script>
-  <script src="resources/game.min.js?v=5"></script>
+  <script src="resources/game.js?v=5"></script>
 </body>
 </html>
