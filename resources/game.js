@@ -135,7 +135,7 @@ function runGame(){
       addClass('hero', 'hero_fire');
       setTimeout(function(){
         removeClass('hero', 'hero_fire');
-      }, 1200);
+      }, 1400);
     };
   };
 
@@ -272,7 +272,7 @@ function runGame(){
       };
 
     // FIRESHOT DETECTION
-      var shot = document.getElementsByClassName('fire-shot')[0],
+      var shot = document.querySelectorAll('.fire-shot:nth-last-of-type(1)')[0],
           shotPositionX = shot.getBoundingClientRect().left,
           shotWidth = shot.getBoundingClientRect().width,
           shotPositionY = parseFloat(getComputedStyle(shot).bottom),
@@ -296,8 +296,8 @@ function runGame(){
         destructibleObstacles[0].remove();
       };
       // remove shot if the bullet didn't hit anywhere
-      if ( shotPositionX > window.innerWidth ) {
-        shot.remove();
+      if ( document.getElementsByClassName('fire-shot')[0].getBoundingClientRect().left >= window.innerWidth ) {
+        document.getElementsByClassName('fire-shot')[0].remove();
       };
 
     } catch {};
