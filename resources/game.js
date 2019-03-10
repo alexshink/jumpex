@@ -24,7 +24,7 @@ var html = document.documentElement,
     obstaclesItems = {
       bomb: {
         img: 'resources/img/obstacles/bomb.png',
-        cls: 'obstacle_bomb'
+        cls: 'obstacle_bomb obstacle_destructible'
       },
       fire: {
         img: 'resources/img/obstacles/fire.gif',
@@ -36,12 +36,10 @@ var html = document.documentElement,
       },
       robot: {
         img: 'resources/img/obstacles/robot.gif',
-        cls: 'obstacle_robot'
+        cls: 'obstacle_robot obstacle_destructible'
       }
     },
 
-    // mobile controls
-    btnJump = getId('btnJump'),
     menu = getId('menu'),
     menuButtons = document.getElementsByClassName('menu__button');
 
@@ -64,9 +62,9 @@ function preloadObstacles(obstaclesItems, finish){
   }
 };
 
-// preloadObstacles(obstaclesItems, function(){
-//   removeClass('page', 'page_preload');
-// });
+preloadObstacles(obstaclesItems, function(){
+  // removeClass('page', 'page_preload');
+});
 
 // menu
 for (var i = 0; i < menuButtons.length; i++) {
@@ -82,7 +80,7 @@ for (var i = 0; i < menuButtons.length; i++) {
             openFullscreen();
           } else {
             closeFullscreen();
-          }
+          };
           break;
       };
     };
@@ -98,18 +96,16 @@ function runGame(){
   obstacles.innerHTML = '';
 
   // render hero
-  var heroRender = document.createElement('div'),
-      hero;
+  var heroRender = document.createElement('div');
 
   heroRender.id = 'hero';
   heroRender.className = 'hero';
   heroRender.innerHTML = '<img src="resources/img/jumpex.gif">';
   page.appendChild(heroRender);
-  hero = getId('hero');
 
   // hero jump
   function heroJump(){
-    if( hero.className.indexOf('hero_jump') == -1 ) {
+    if( getId('hero').className.indexOf('hero_jump') == -1 ) {
       addClass('hero', 'hero_jump');
       setTimeout(function(){
         try {
@@ -121,16 +117,25 @@ function runGame(){
 
   // hero fire
   function heroFire(){
-    if( hero.className.indexOf('hero_fire') == -1 ) {
+    if( getId('hero').className.indexOf('hero_fire') == -1 ) {
       // render shot
-      var fireShot = document.createElement('span');
-      fireShot.className = 'fire-shot';
-      hero.appendChild(fireShot);
+      var shot = document.createElement('span');
+      shot.className = 'fire-shot';
+      shot.style.bottom = parseFloat(getComputedStyle(getId('hero')).bottom) + 35 + 'px';
+      shot.style.left = getId('hero').getBoundingClientRect().left + 40 + 'px';
+      page.appendChild(shot);
+      // shot animation
+      shotSpeed = window.innerWidth * (pixelsPerMs-0.001);
+      var newShot = document.querySelectorAll('.fire-shot:nth-last-of-type(1)')[0];
+      newShot.style['transition'] = 'transform linear ' + shotSpeed + 's';
+      setTimeout(function(){
+        newShot.style['transform'] = 'translateX(' + window.innerWidth + 'px)';
+      }, 10)
       // hero class
       addClass('hero', 'hero_fire');
       setTimeout(function(){
         removeClass('hero', 'hero_fire');
-      }, 700);
+      }, 1200);
     };
   };
 
@@ -146,10 +151,15 @@ function runGame(){
     };
   };
 
-  // mobile jump
+  // mobile hero controls
   document.addEventListener('touchstart', function(e){
-    if ( e.target.className.indexOf('jump') != -1 ) {
-      heroJump();
+    switch (e.target.id) {
+      case 'control-jump':
+        heroJump();
+        break;
+      case 'control-fire':
+        heroFire();
+        break;
     };
   }, false);
 
@@ -230,24 +240,24 @@ function runGame(){
     }
   }());
 
-  // obstacle detection
-  var obstacleDetection = setInterval(function(){
+  // detection
+  var detection = setInterval(function(){
     try {
-      var heroOffsetLeft = hero.getBoundingClientRect().left,
-          heroPosX = heroOffsetLeft + hero.getBoundingClientRect().width,
-          heroPosY = parseFloat(getComputedStyle(hero).bottom),
+    // OBSTACLE DETECTION
+      var heroOffsetLeft = getId('hero').getBoundingClientRect().left,
+          heroPosX = heroOffsetLeft + getId('hero').getBoundingClientRect().width,
+          heroPosY = parseFloat(getComputedStyle(getId('hero')).bottom),
 
           firstObstacle = document.getElementsByClassName('obstacle')[0],
           obstaclePosX = firstObstacle.getBoundingClientRect().left,
           obstacleLeftWidth = obstaclePosX + firstObstacle.getBoundingClientRect().width,
           obstaclePosY = parseFloat(getComputedStyle(firstObstacle).bottom) + firstObstacle.getBoundingClientRect().height;
-
+      // collision
       if ( (obstaclePosX <= heroPosX && obstacleLeftWidth > heroOffsetLeft) && obstaclePosY > heroPosY ) {
         firstObstacle.classList.add('obstacle_active');
         window.stopGame();
-
-        // bomb explosion
-        if ( firstObstacle.className.indexOf('obstacle_bomb') != -1 ) {
+        // obstacle explosion
+        if ( firstObstacle.className.indexOf('destructible') != -1 ) {
           firstObstacle.firstElementChild.remove();
           firstObstacle.appendChild(document.createElement('img'));
           firstObstacle.firstElementChild.src = 'resources/img/obstacles/explosive.gif';
@@ -255,27 +265,55 @@ function runGame(){
             firstObstacle.remove();
           }, 2500);
         };
-        
       };
-
       // remove useless obstacle
       if ( firstObstacle.getBoundingClientRect().left <= -100 ) {
         firstObstacle.remove();
       };
+
+    // FIRESHOT DETECTION
+      var shot = document.getElementsByClassName('fire-shot')[0],
+          shotPositionX = shot.getBoundingClientRect().left,
+          shotWidth = shot.getBoundingClientRect().width,
+          shotPositionY = parseFloat(getComputedStyle(shot).bottom),
+          destructibleObstacles = document.getElementsByClassName('obstacle_destructible');
+      // find destructible obstacles ahead
+      for (var i=0; i<destructibleObstacles.length; i++) {
+        var destructibleObstaclePosition = destructibleObstacles[i].getBoundingClientRect().left + destructibleObstacles[i].getBoundingClientRect().width;
+        if ( destructibleObstaclePosition < shotPositionX ) {
+          destructibleObstacles.splice(i, 1);
+        };
+      };
+      // remove shot and destructible obstacle
+      var closestObstaclePositionX = destructibleObstacles[0].getBoundingClientRect().left,
+          closestObstaclePositionY = parseFloat(getComputedStyle(destructibleObstacles[0]).bottom) + destructibleObstacles[0].getBoundingClientRect().height;
+      if (
+           ((shotPositionX + shotWidth) >= closestObstaclePositionX) 
+           &&
+           (shotPositionY - 15) <= closestObstaclePositionY
+      ) {
+        shot.remove();
+        destructibleObstacles[0].remove();
+      };
+      // remove shot if the bullet didn't hit anywhere
+      if ( shotPositionX > window.innerWidth ) {
+        shot.remove();
+      };
+
     } catch {};
   }, 10);
 
   // stop game
   window.stopGame = function(){
     clearInterval(getCoins);
-    clearInterval(obstacleDetection);
+    clearInterval(detection);
     menu.scrollTop = 0;
     removeClass('page', 'page_rungame');
     setTimeout(function(){
       removeClass('menu', 'menu_disable');
     }, 700);
     renderCoins.remove();
-    hero.remove();
+    getId('hero').remove();
     // stop active obstacle
     var activeObstacle = document.getElementsByClassName('obstacle')[0];
     activeObstacle.style['left'] = activeObstacle.getBoundingClientRect().left + 'px';

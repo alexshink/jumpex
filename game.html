@@ -41,7 +41,7 @@
   <meta name="msapplication-TileImage" content="resources/logo/ms-icon-144x144.png">
 
   <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
-  <link rel="stylesheet" href="resources/game.css?v=3">
+  <link rel="stylesheet" href="resources/game.min.css?v=4">
 </head>
 <body id="page" class="page">
   
@@ -52,7 +52,10 @@
 
   <div class="controls">
     <div class="controls__inner">
-      <button type="button" id="btnJump" class="controls__button controls__button_type_jump">Jump!</button>
+      <button type="button" id="control-jump" class="controls__button controls__button_type_jump">Jump!</button>
+    </div>
+    <div class="controls__inner">
+      <button type="button" id="control-fire" class="controls__button controls__button_type_fire">Fire!</button>
     </div>
   </div>
 
@@ -94,6 +97,6 @@
       });
     };
   </script>
-  <script src="resources/game.js?v=5"></script>
+  <script src="resources/game.min.js?v=6"></script>
 </body>
 </html>
