@@ -21,34 +21,58 @@ var html = document.documentElement,
     pixelsPerMs = roadSpeed / 388, // road background image = 388
 
     // obstacles
-    obstaclesItems = {
-      bomb: {
-        img: 'resources/img/obstacles/bomb.png',
-        cls: 'obstacle_bomb obstacle_destructible'
+    resources = {
+      'obstaclesItems': {
+        'bomb': {
+          'img': 'resources/img/obstacles/bomb.png',
+          'cls': 'obstacle_bomb obstacle_destructible'
+        },
+        'fire': {
+          'img': 'resources/img/obstacles/fire.gif',
+          'cls': 'obstacle_fire'
+        },
+        'plasm': {
+          'img': 'resources/img/obstacles/plasm.gif',
+          'cls': 'obstacle_plasm'
+        },
+        'robot': {
+          'img': 'resources/img/obstacles/robot.gif',
+          'cls': 'obstacle_robot obstacle_destructible'
+        }
       },
-      fire: {
-        img: 'resources/img/obstacles/fire.gif',
-        cls: 'obstacle_fire'
-      },
-      plasm: {
-        img: 'resources/img/obstacles/plasm.gif',
-        cls: 'obstacle_plasm'
-      },
-      robot: {
-        img: 'resources/img/obstacles/robot.gif',
-        cls: 'obstacle_robot obstacle_destructible'
+      'additional': {
+        'coin': {
+          'img': 'resources/img/coin.svg'
+        },
+        'jumpex': {
+          'img': 'resources/img/jumpex.gif'
+        },
+        'explosive': {
+          'img': 'resources/img/obstacles/explosive.gif'
+        },
+        'buttonfire': {
+          'img': 'resources/img/controls__button_type_fire.svg'
+        },
+        'buttonjump': {
+          'img': 'resources/img/controls__button_type_jump.svg'
+        },
+        'fireshot': {
+          'img': 'resources/img/fire-shot.svg'
+        }
       }
     },
+
+    obstaclesItems = resources.obstaclesItems;
 
     menu = getId('menu'),
     menuButtons = document.getElementsByClassName('menu__button');
 
-// preload obstacles images
-function preloadObstacles(obstaclesItems, finish){
+// preload images
+function preloadObstacles(resources, finish){
   var counter = 0,
-      imgCount = Object.keys(obstaclesItems).length;
-  Object.keys(obstaclesItems).map(function(objectKey) {
-    preloadImage(obstaclesItems[objectKey].img, function(){
+      imgCount = Object.keys(resources).length;
+  Object.keys(resources).map(function(objectKey) {
+    preloadImage(resources[objectKey].img, function(){
       counter++;
       if ( counter == imgCount ) {
         finish();
@@ -62,9 +86,17 @@ function preloadObstacles(obstaclesItems, finish){
   }
 };
 
-preloadObstacles(obstaclesItems, function(){
+preloadObstacles(resources.obstaclesItems, function(){
   // removeClass('page', 'page_preload');
 });
+
+// Object.keys(resources).map(function(objectKey) {
+//   Object.keys(resources[objectKey]).map(function(objectKeys) {
+//     console.log('2: ' + resources[objectKey][objectKeys].img)
+//   });
+// });
+
+console.log(Object.keys(resources).length)
 
 // menu
 for (var i = 0; i < menuButtons.length; i++) {
@@ -200,9 +232,11 @@ function runGame(){
   // get coins
   var getCoins;
   setTimeout(function(){
-    getCoins = setInterval(function(){
-      increaseCoins();
-    }, 100);
+    if ( page.className.indexOf('page_rungame') != -1 ) {
+      getCoins = setInterval(function(){
+        increaseCoins();
+      }, 100);
+    };
   }, 1400);
 
   // render obstacles
